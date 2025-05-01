@@ -113,18 +113,18 @@ class DataPreprocessor:
         # Passo 1: Identifica a página mais relevante
         page_title = self.get_relevant_page(question)
         
-        # Passo 2: Busca o conteúdo bruto
-        raw_content = self.fetch_page_content(page_title)
-        if not raw_content:
-            return None
+        # Passo 2: Busca o conteúdo
+        content = self.fetch_page_content(page_title)
+        if not content:
+            return "Não encontrei dados sobre este tópico no banco de dados."
         
         # Passo 3: Encontra trechos relevantes
-        relevant_chunks = self.get_relevant_chunks(raw_content, question)
-        context = " ".join(relevant_chunks)
+        relevant_chunks = self.get_relevant_chunks(content, question)
+        context = "\n".join(relevant_chunks)
         
-        # Passo 4: Resume se necessário
-        if len(context.split()) > 300:  # Só resume se for muito longo
-            context = self.summarize_text(context)
+        # # Passo 4: Resume se necessário
+        # if len(context.split()) > 300:  # Só resume se for muito longo
+        #     context = self.summarize_text(context)
         
         return context
     
