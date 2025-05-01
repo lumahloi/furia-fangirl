@@ -2,9 +2,12 @@ import scripts.utils as utils, os
 from scripts.create_db_data import create_db_data
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
+from dotenv import load_dotenv
+
+load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, resources={r"/*": {"origins": [os.get_env('MY_FRONTEND')]}})
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
