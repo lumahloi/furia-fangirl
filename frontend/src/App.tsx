@@ -109,9 +109,8 @@ function App(){
             p: 2,
             display: 'flex',
             flexDirection: 'column',
-            gap: 3
           }}>
-            <BotAnswer message="aaaaaaaaaaaaaaa" />
+            <BotAnswer message="Faça uma pergunta, eu sei tudo sobre a FURIA!" />
 
             {messages.slice(1).map((message) => 
               message.isUser ? (
@@ -119,19 +118,33 @@ function App(){
                   key={message.id} 
                   sx={{ 
                     display: 'flex', 
-                    flexDirection: 'column', 
-                    gap: 2, 
+                    flexDirection: 'column',
                     alignSelf: 'flex-end', 
-                    maxWidth: '80%' 
+                    maxWidth: '100%',
+                    width: 'fit-content' // Ajusta a largura ao conteúdo
                   }}
                 >
-                  <Box sx={{ p: 2, borderRadius: 4 }}>
+                  <Box sx={{
+                    borderRadius: 4,
+                    width: '100%' 
+                  }}>
                     <Box sx={{ 
                       p: 2, 
                       backgroundColor: '#eeeeee', 
-                      borderRadius: 10 
+                      borderRadius: 10,
+                      whiteSpace: 'pre-wrap', // Permite quebra de linha
+                      wordBreak: 'break-word', 
+                      overflowWrap: 'break-word', 
+                      minWidth: '50px', 
+                      maxWidth: '100%', 
+                      display: 'inline-block' 
                     }}>
-                      <Typography variant="body1">{message.text}</Typography>
+                      <Typography variant="body1" sx={{
+                        whiteSpace: 'pre-wrap',
+                        wordBreak: 'break-word'
+                      }}>
+                        {message.text}
+                      </Typography>
                     </Box>
                   </Box>
                 </Box>

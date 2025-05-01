@@ -35,7 +35,7 @@ def handle_query():
         #     return jsonify({'error': 'Could not generate answer'}), 500
         
         # [6] RETORNAR AO FRONT
-        answer_user_question = "ablublubleblublublue"
+        answer_user_question = "ablublublue"
         return jsonify({'response': answer_user_question})
     
     except Exception as e:
