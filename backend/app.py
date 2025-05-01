@@ -30,23 +30,22 @@ def handle_query():
             return jsonify({'error': 'Input field is required'}), 400
         user_question = data.get('input')
             
-        # # [3] PERGUNTAR QUAL A PÁGINA MAIS IDEAL
-        # answer_context = utils.find_page(user_question)
-        # if not answer_context:
-        #     return jsonify({'error': 'Could not find appropriate page'}), 404
+        # [3] PERGUNTAR QUAL A PÁGINA MAIS IDEAL
+        answer_context = utils.find_page(user_question)
+        if not answer_context:
+            return jsonify({'error': 'Could not find appropriate page'}), 404
         
-        # # [4] RESGATAR CONTEXTO DA PÁGINA IDEAL
-        # context = utils.get_context(answer_context)
-        # if not context:
-        #     return jsonify({'error': 'Could not retrieve page context'}), 404
+        # [4] RESGATAR CONTEXTO DA PÁGINA IDEAL
+        context = utils.get_context(answer_context)
+        if not context:
+            return jsonify({'error': 'Could not retrieve page context'}), 404
         
-        # # [5] RECEBER RESPOSTA PARA O USUARIO
-        # answer_user_question = utils.get_answer(context, user_question)
-        # if not answer_user_question:
-        #     return jsonify({'error': 'Could not generate answer'}), 500
+        # [5] RECEBER RESPOSTA PARA O USUARIO
+        answer_user_question = utils.get_answer(context, user_question)
+        if not answer_user_question:
+            return jsonify({'error': 'Could not generate answer'}), 500
         
         # [6] RETORNAR AO FRONT
-        answer_user_question = "ablublublue"
         return jsonify({'response': answer_user_question})
     
     except Exception as e:
