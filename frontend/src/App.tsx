@@ -60,7 +60,7 @@ function App() {
   });
 
   const apiUrl =
-    process.env.REACT_APP_API_URL || "http://localhost:5000/api/query";
+    process.env.REACT_APP_API_URL;
 
   useEffect(() => {
     localStorage.setItem("chatMessages", JSON.stringify(messages));
@@ -81,12 +81,16 @@ function App() {
     setIsLoading(true);
 
     try {
+      if (!apiUrl) {
+        throw new Error("API URL is not defined. Please check your environment variables.");
+      }
       const res = await fetch(apiUrl, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({ input }),
+        mode: 'cors'
       });
 
       if (!res.ok) {
