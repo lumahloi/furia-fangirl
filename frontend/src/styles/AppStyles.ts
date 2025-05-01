@@ -1,3 +1,5 @@
+import { margin, textAlign } from "@mui/system"
+
 export const chatBox = {
   display: 'flex',
   flexDirection: 'column',
@@ -102,14 +104,17 @@ export const contactIcons = {
   transition: 'all 0.3s ease',
   '&:hover': {
     transform: 'scale(1.2)',
-    color: 'primary.main'
+    color: '#817d4e',
   }
 };
 
 export const sideBarContainer = {
   minHeight: '20vh',
   alignContent: 'start',
-  marginTop: '50px'
+  marginTop: '50px',
+  display: 'flex',
+  flexDirection: 'column',
+  gap: 3,
 };
 
 export const contactInfoContainer = {
@@ -125,3 +130,32 @@ export const developerInfoContainer = {
   alignContent: 'center',
   alignItems: 'center'
 };
+
+export const imgAvatar = {
+  maxHeight: '300px',
+  maxWidth: '200px',
+  backgroundColor: '#817d4e',
+  borderRadius: '5px',
+  '& img': {
+    width: '100%',
+    height: '100%',
+    objectFit: 'cover',
+    transition: 'all 0.3s ease',
+    '&:hover': {
+      transform: 'scale(1.05)',
+    }
+  },
+  margin: 'auto',
+};
+
+export const textAvatar = {
+  textAlign: 'center',
+  color: '#817d4e',
+}
+
+export const sideBar = {
+  maxWidth: "20vw",
+  display: "flex",
+  flexDirection: "column",
+  gap: 6
+}

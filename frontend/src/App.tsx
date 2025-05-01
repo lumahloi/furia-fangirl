@@ -30,6 +30,9 @@ import {
   sideBarContainer,
   contactInfoContainer,
   developerInfoContainer,
+  imgAvatar,
+  textAvatar,
+  sideBar
 } from "./styles/AppStyles";
 import BotAnswer from "./BotAnswer";
 import "./styles/App.css";
@@ -120,19 +123,19 @@ function App() {
 
   return (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
-      <Container sx={{ maxWidth: "20vw" }}>
+      <Container sx={sideBar}>
         <Box sx={sideBarContainer}>
-          <Box>
-            <img src="" alt="" />
+          <Box sx={imgAvatar}>
+            <img src="img/avatar.png" alt="" />
           </Box>
-          <Typography variant="h5" fontWeight="bold">
-            FANGIRL
+          <Typography variant="h5" fontWeight="bold" sx={textAvatar}>
+            Fani, a Fangirl
           </Typography>
         </Box>
 
         <Box sx={contactInfoContainer}>
           <Box>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom sx={{ color: '#817d4e' }}>
               Desenvolvido por
             </Typography>
             <Box sx={developerInfoContainer}>
@@ -148,7 +151,7 @@ function App() {
           </Box>
 
           <Box>
-            <Typography variant="h6" gutterBottom>
+            <Typography variant="h6" gutterBottom sx={{ color: '#817d4e' }}>
               Informações de contato
             </Typography>
             <Box sx={{ display: "flex", gap: 2 }}>
@@ -224,7 +227,6 @@ function App() {
               <Button
                 type="submit"
                 disabled={isLoading || !input.trim()}
-                color="primary"
                 sx={buttonSubmit}
               >
                 {isLoading ? <CircularProgress size={24} /> : <Send />}

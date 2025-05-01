@@ -48,7 +48,7 @@ export const avatarStyles = {
       boxShadow: '0 6px 12px rgba(0,0,0,0.3)'
     }
   },
-  backgroundColor: 'grey'
+  backgroundColor: '#817d4e'
 };
 
 export const botNameStyles = {
