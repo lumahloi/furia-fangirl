@@ -14,7 +14,7 @@ PAGES = [
 ]
 
 def setup_database():
-    connection = sqlite3.connect('./database/liquipedia_data.db')
+    connection = sqlite3.connect('./databases/liquipedia_data.db')
     cursor = connection.cursor()
     
     cursor.execute('''
@@ -75,11 +75,9 @@ def extract_page_data(session, page_title, connection):
     }
     
     try:
-        print(f"Extraindo: {page_title}")
         response = session.get(api_url, params=params)
     
         if response.status_code == 200:
-            print('Requisição feita com sucesso')
             data = response.json()
             
             if not isinstance(data, dict):
@@ -132,7 +130,7 @@ def extract_page_data(session, page_title, connection):
         print(f"Erro ao processar {page_title}: {str(e)}")
         return False
 
-def main():
+def create_db_data():
     session = requests.Session()
     session.headers.update({
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -147,7 +145,3 @@ def main():
         
     connection.close()
     
-    print("Extração de todas as páginas concluída!")
-    
-if __name__ == "__main__":
-    main()
