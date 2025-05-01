@@ -1,17 +1,35 @@
 import React, { useState } from 'react';
 import { Box, Container, Typography, Avatar, TextField, Button, CircularProgress } from '@mui/material';
 import { LinkedIn, GitHub, Web, Mail, Send } from '@mui/icons-material';
+import BotAnswer from './BotAnswer';
 
-function App() {
+interface Message {
+  id: number;
+  text: string;
+  isUser: boolean;
+}
+
+function App(){
   const [input, setInput] = useState('');
-  const [response, setResponse] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([
+    { id: 1, text: '', isUser: false }
+  ]);
   const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/query';
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!input.trim()) return;
+  
+    const userMessage: Message = {
+      id: Date.now(),
+      text: input,
+      isUser: true
+    };
+    
+    setMessages(prev => [...prev, userMessage]);
+    setInput('');
     setIsLoading(true);
-    setResponse('');
     
     try {
       const res = await fetch(apiUrl, {
@@ -22,102 +40,41 @@ function App() {
         body: JSON.stringify({ input }),
       });
       
+      if (!res.ok) {
+        throw new Error(`HTTP error! status: ${res.status}`);
+      }
+      
       const data = await res.json();
-      setResponse(data.response);
+      
+      const botMessage: Message = {
+        id: Date.now() + 1,
+        text: data.response,
+        isUser: false
+      };
+      
+      setMessages(prev => [...prev, botMessage]);
+      
     } catch (error) {
       console.error('Error:', error);
-      setResponse('Ocorreu um erro ao processar sua solicitação.');
+      const errorMessage: Message = {
+        id: Date.now() + 1,
+        text: 'Ocorreu um erro ao processar sua solicitação.',
+        isUser: false
+      };
+      setMessages(prev => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
   };
 
   return (
-    <Box>
-      <Container>
-        <Box>
-          <Typography variant="h4" gutterBottom sx={{ mt: 8 }}>NomeMuitoCriativo</Typography>
-        </Box>
-
-        <Box sx={{ mb: 10, display: 'flex', flexDirection: 'column', justifyItems: 'flex-start', gap: 5}}>
-          <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2, mt: 4 }} id="first-msg">
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              <Typography variant="h6" gutterBottom>Mascote</Typography>
-            </Box>
-            <Typography variant="body1" gutterBottom>
-              Oiii
-            </Typography>
-          </Box>
-
-          <form onSubmit={handleSubmit}>
-            <Box
-              sx={{
-                display: 'flex',
-                flexDirection: 'row',
-                alignItems: 'flex-end',
-                width: '100%',
-                minHeight: '60px',
-              }}
-
-              id="user-input"
-            >
-              <TextField
-                multiline
-                maxRows={4}
-                variant="outlined"
-                placeholder="Digite sua mensagem..."
-                disabled={isLoading}
-                onChange={(e) => setInput(e.target.value)}
-                value={input}
-                sx={{
-                  flexGrow: 1,
-                  '& .MuiOutlinedInput-root': {
-                    borderRadius: 4,
-                  }
-                }}
-              />
-              
-              <Button
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                size="large"
-              >
-                {isLoading ? (
-                  <CircularProgress size={24} />
-                ) : (
-                  <Send color={input.trim() ? 'primary' : 'disabled'} />
-                )}
-              </Button>
-            </Box>
-          </form>
-
-          <Box class="bot-answers" sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-            <Box sx={{ display: 'flex', gap: 2 }}>
-              <Avatar alt="Remy Sharp" src="/static/images/avatar/1.jpg" />
-              <Typography variant="h6" gutterBottom>Mascote</Typography>
-            </Box>
-            {response && !isLoading && (
-              <Typography variant="body1" gutterBottom>
-                {response}
-              </Typography>
-            )}
-
-            {isLoading && (
-              <Typography variant="body1" gutterBottom>
-              Processando sua solicitação...
-              </Typography>
-            )}
-          </Box>
-        </Box>
-      </Container>
-      
-      <Container sx={{ display: 'flex', gap: 20 }}>
-        <Box>
+    <Box sx={{ display: 'flex', flexDirection: 'row' }}>
+      <Container sx={{ maxWidth:'20vw' }}>
+        <Box sx={{ minHeight:'20vh', alignContent: 'start', marginTop: '50px' }}>
           <Typography variant="h5">NomeMuitoCriativo</Typography>
         </Box>
 
-        <Box sx={{ display: 'flex', gap: 10 }}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
           <Box>
             <Typography variant="h6" gutterBottom>Desenvolvidor por</Typography>
             <Typography variant="subtitle1">Lumah Pereira</Typography>
@@ -133,8 +90,103 @@ function App() {
             </Box>
           </Box>
         </Box>
-
       </Container>
+
+      <Container sx={{ minWidth:'80vw' }}>
+        <Box sx={{
+          display: 'flex',
+          flexDirection: 'column',
+          height: '90vh',
+          marginTop: '40px',
+          width: '100%',
+          border: '1px solid #e0e0e0',
+          borderRadius: 2,
+          overflow: 'hidden'
+        }}>
+          <Box sx={{
+            flexGrow: 1,
+            overflowY: 'auto',
+            p: 2,
+            display: 'flex',
+            flexDirection: 'column',
+            gap: 3
+          }}>
+            <BotAnswer message="aaaaaaaaaaaaaaa" />
+
+            {messages.slice(1).map((message) => 
+              message.isUser ? (
+                <Box 
+                  key={message.id} 
+                  sx={{ 
+                    display: 'flex', 
+                    flexDirection: 'column', 
+                    gap: 2, 
+                    alignSelf: 'flex-end', 
+                    maxWidth: '80%' 
+                  }}
+                >
+                  <Box sx={{ p: 2, borderRadius: 4 }}>
+                    <Box sx={{ 
+                      p: 2, 
+                      backgroundColor: '#eeeeee', 
+                      borderRadius: 10 
+                    }}>
+                      <Typography variant="body1">{message.text}</Typography>
+                    </Box>
+                  </Box>
+                </Box>
+              ) : (
+                <BotAnswer key={message.id} message={message.text} />
+              )
+            )}
+
+            {isLoading && (
+              <BotAnswer message="Processando sua solicitação..." />
+            )}
+          </Box>
+
+          <Box 
+            component="form" 
+            onSubmit={handleSubmit}
+            id="user-input"
+            sx={{ 
+              p: 2,
+              borderTop: '1px solid #e0e0e0',
+              bgcolor: 'background.paper'
+            }}
+          >
+            <Box sx={{ display: 'flex', gap: 1, alignItems: 'flex-end' }}>
+              <TextField
+                multiline
+                maxRows={4}
+                fullWidth
+                variant="outlined"
+                placeholder="Digite sua mensagem..."
+                disabled={isLoading}
+                onChange={(e) => setInput(e.target.value)}
+                value={input}
+                sx={{
+                  '& .MuiOutlinedInput-root': {
+                    borderRadius: 4,
+                  }
+                }}
+              />
+              <Button
+                type="submit"
+                disabled={isLoading || !input.trim()}
+                color="primary"
+                sx={{ 
+                  height: '56px',
+                  width: '56px',
+                  alignSelf: 'flex-end'
+                }}
+              >
+                {isLoading ? <CircularProgress size={24} /> : <Send />}
+              </Button>
+            </Box>
+          </Box>
+        </Box>
+      </Container>     
     </Box>
   );
 }
