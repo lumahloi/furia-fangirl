@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Box, Typography, Avatar } from "@mui/material";
 import {
   botAnswerContainer,
@@ -14,27 +14,47 @@ interface BotAnswerProps {
 
 function BotAnswer({ message }: BotAnswerProps) {
   const messageEndRef = useRef<HTMLDivElement>(null);
+  const [displayedMessage, setDisplayedMessage] = useState("");
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isTypingComplete, setIsTypingComplete] = useState(false);
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [message]);
+
+  useEffect(() => {
+    if (currentIndex < message.length) {
+      const timeout = setTimeout(() => {
+        setDisplayedMessage(prev => prev + message[currentIndex]);
+        setCurrentIndex(prev => prev + 1);
+      }, 50); // Ajuste este valor para mudar a velocidade
+
+      return () => clearTimeout(timeout);
+    }
+  }, [currentIndex, message]);
+
+    // Reset quando receber uma nova mensagem
+    useEffect(() => {
+      setDisplayedMessage("");
+      setCurrentIndex(0);
+    }, [message]);
 
   return (
     <Box sx={botAnswerContainer}>
       <Box sx={{ display: "flex", gap: 2, alignItems: "center" }}>
         <Avatar
           alt="Chat Bot"
-          src="/static/images/avatar/1.jpg"
+          src="/img/fangirl.png"
           sx={avatarStyles}
         />
         <Typography variant="h6" sx={botNameStyles}>
-          Mascote
+          Fani
         </Typography>
       </Box>
 
       <Box sx={messageBubble}>
         <Typography variant="body1" sx={messageText}>
-          {message}
+          {displayedMessage}
         </Typography>
       </Box>
 

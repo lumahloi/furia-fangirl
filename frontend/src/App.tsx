@@ -50,7 +50,7 @@ function App() {
       : [
           {
             id: 1,
-            text: "Faça uma pergunta, eu sei tudo sobre a FURIA!",
+            text: "Olá, eu sou a Fani! Sou a maior fã do time de CS da FURIA do universo ٩(^ᗜ^ )و ´-!! Me faça qualquer pergunta sobre que vou te responder.",
             isUser: false,
           },
         ];
@@ -122,6 +122,9 @@ function App() {
     <Box sx={{ display: "flex", flexDirection: "row" }}>
       <Container sx={{ maxWidth: "20vw" }}>
         <Box sx={sideBarContainer}>
+          <Box>
+            <img src="" alt="" />
+          </Box>
           <Typography variant="h5" fontWeight="bold">
             FANGIRL
           </Typography>
@@ -165,7 +168,7 @@ function App() {
                 <Web sx={contactIcons} />
               </Link>
               <Link
-                href="lumah-pereira.pdf"
+                href="cv/lumah-pereira.pdf"
                 download="lumah-pereira.pdf"
                 sx={contactIcons}
               >
@@ -195,7 +198,7 @@ function App() {
               )
             )}
             {isLoading && (
-              <BotAnswer message="Processando sua solicitação..." />
+              <BotAnswer message="Huum, deixa eu pensar um pouquinho..." />
             )}
             <div ref={messagesEndRef} />
           </Box>
@@ -212,7 +215,7 @@ function App() {
                 maxRows={4}
                 fullWidth
                 variant="outlined"
-                placeholder="Digite sua mensagem..."
+                placeholder="Faça sua pergunta..."
                 disabled={isLoading}
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
