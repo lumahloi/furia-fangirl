@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
-import { Box, Container, Typography, Avatar, TextField, Button, CircularProgress } from '@mui/material';
-import { LinkedIn, GitHub, Web, Mail, Send } from '@mui/icons-material';
-import BotAnswer from './BotAnswer';
+import React, { useState, useEffect } from 'react';
+import { Box, Container, Typography, TextField, Button, CircularProgress } from '@mui/material';
+import { LinkedIn, GitHub, Mail, Web, Send } from '@mui/icons-material';
+import BotAnswer from './BotAnswer'; 
 
 interface Message {
   id: number;
@@ -9,13 +9,21 @@ interface Message {
   isUser: boolean;
 }
 
-function App(){
+function App() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [messages, setMessages] = useState<Message[]>([
-    { id: 1, text: '', isUser: false }
-  ]);
+  const [messages, setMessages] = useState<Message[]>(() => {
+    const savedMessages = localStorage.getItem('chatMessages');
+    return savedMessages ? JSON.parse(savedMessages) : [
+      { id: 1, text: 'Faça uma pergunta, eu sei tudo sobre a FURIA!', isUser: false }
+    ];
+  });
+
   const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:5000/api/query';
+
+  useEffect(() => {
+    localStorage.setItem('chatMessages', JSON.stringify(messages));
+  }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -67,6 +75,12 @@ function App(){
     }
   };
 
+  const messagesEndRef = React.useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+  }, [messages]);
+
   return (
     <Box sx={{ display: 'flex', flexDirection: 'row' }}>
       <Container sx={{ maxWidth:'20vw' }}>
@@ -109,10 +123,9 @@ function App(){
             p: 2,
             display: 'flex',
             flexDirection: 'column',
+            gap: 2
           }}>
-            <BotAnswer message="Faça uma pergunta, eu sei tudo sobre a FURIA!" />
-
-            {messages.slice(1).map((message) => 
+            {messages.map((message) => 
               message.isUser ? (
                 <Box 
                   key={message.id} 
@@ -121,18 +134,15 @@ function App(){
                     flexDirection: 'column',
                     alignSelf: 'flex-end', 
                     maxWidth: '100%',
-                    width: 'fit-content' // Ajusta a largura ao conteúdo
+                    width: 'fit-content'
                   }}
                 >
-                  <Box sx={{
-                    borderRadius: 4,
-                    width: '100%' 
-                  }}>
+                  <Box sx={{ borderRadius: 4, width: '100%' }}>
                     <Box sx={{ 
                       p: 2, 
                       backgroundColor: '#eeeeee', 
                       borderRadius: 10,
-                      whiteSpace: 'pre-wrap', // Permite quebra de linha
+                      whiteSpace: 'pre-wrap',
                       wordBreak: 'break-word', 
                       overflowWrap: 'break-word', 
                       minWidth: '50px', 
@@ -152,10 +162,10 @@ function App(){
                 <BotAnswer key={message.id} message={message.text} />
               )
             )}
-
             {isLoading && (
               <BotAnswer message="Processando sua solicitação..." />
             )}
+            <div ref={messagesEndRef} />
           </Box>
 
           <Box 
