@@ -7,11 +7,12 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
+
 CORS(app, resources={
     r"/api/*": {
-        "origins": [os.getenv('MY_FRONTEND'), "http://localhost:3000"],
-        "methods": ["GET", "POST", "OPTIONS"],
-        "allow_headers": ["Content-Type"]
+        "origins": [os.getenv('MY_FRONTEND')],
+        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+        "allow_headers": ["Content-Type", "Authorization"]
     }
 })
 
@@ -23,14 +24,13 @@ def serve(path):
         return send_from_directory('frontend/build', path)
     else:
         return send_from_directory('frontend/build', 'index.html')
-    
+
 @app.route('/api/<path:path>', methods=['OPTIONS'])
 def options_handler(path):
-    return '', 200, {
-        'Access-Control-Allow-Origin': '*',
-        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
-        'Access-Control-Allow-Headers': 'Content-Type'
-    }
+    response = jsonify()
+    response.headers.add("Access-Control-Allow-Origin", os.getenv('MY_FRONTEND'))
+    response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
+    return response
 
 @app.route('/api/query', methods=['POST'])
 def handle_query():
