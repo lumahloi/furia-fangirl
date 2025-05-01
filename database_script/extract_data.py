@@ -32,56 +32,33 @@ def setup_database():
     return connection
 
 def clean_html(raw_html):
-    """
-    Limpa o HTML removendo:
-    - Elementos especificados (scripts, imagens, menus etc.)
-    - Atributos de todas as tags
-    - Quebras de linha desnecessárias
-    - Preserva outras tags como <p>, <div>, etc.
-    """
     if not raw_html:
         return ""
     
     try:
         soup = BeautifulSoup(raw_html, 'html.parser')
         
-        # Remove elementos não desejados
-        if soup.head:
-            soup.head.decompose()
-        
-        for element in soup(['script', 'style', 'img', 'link', 'meta', 'noscript', 'i']):
-            element.decompose()
-        
         for element_id in ["main-nav", "wiki-nav", "footer", "sidebar-toc-column"]:
-            element = soup.find(id=element_id)
-            if element:
+            for element in soup.find_all(id=element_id):
                 element.decompose()
         
         for class_name in ["tabs-static", "reflist columns references-column-count references-column-count-2"]:
             for element in soup.find_all(class_=class_name):
                 element.decompose()
         
-        # Remove todos os atributos de todas as tags
-        for tag in soup.find_all(True):
-            tag.attrs = {}
+        for element in soup(['script', 'style']):
+            element.decompose()
         
-        # Remove nós de texto vazios (usando 'string' em vez de 'text' para evitar warning)
-        for element in soup.find_all(string=True):
-            if element.strip() == '':
-                element.extract()
+        text = soup.get_text(' ', strip=True)
         
-        # Converte de volta para string HTML limpa
-        cleaned_html = str(soup)
+        text = ' '.join(text.split()) 
+        text = re.sub(r'\s+', ' ', text).strip() 
         
-        # Remove espaços em branco extras entre tags
-        cleaned_html = ' '.join(cleaned_html.split())
-        cleaned_html = cleaned_html.replace('> <', '><')  # Remove espaços entre tags
-        
-        return cleaned_html
+        return text
     
     except Exception as e:
         print(f"Erro ao limpar HTML: {str(e)}")
-        return raw_html
+        return raw_html  
     
 def extract_page_data(session, page_title, connection):
     api_url = "https://liquipedia.net/counterstrike/api.php"
