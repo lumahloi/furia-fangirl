@@ -122,7 +122,7 @@ function App() {
   }, [messages]);
 
   return (
-    <Box sx={{ display: "flex", flexDirection: { xs: "column", md: "row" } }}>
+    <Box sx={{ display: "flex", flexDirection: { xs: "column", sm: "row" } }}>
       <Container sx={sideBar}>
         <Box sx={sideBarContainer}>
           <Box sx={imgAvatar}>

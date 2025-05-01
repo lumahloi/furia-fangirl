@@ -152,7 +152,7 @@ export const textAvatar = {
 }
 
 export const sideBar = {
-  maxWidth: "20vw",
+  maxWidth: { xs: "100vw", sm: "20vw"},
   display: "flex",
   flexDirection: "column",
   gap: 6
