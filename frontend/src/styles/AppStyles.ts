@@ -1,5 +1,3 @@
-import { margin, textAlign } from "@mui/system"
-
 export const chatBox = {
   display: 'flex',
   flexDirection: 'column',
