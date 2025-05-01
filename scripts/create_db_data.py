@@ -131,6 +131,7 @@ def extract_page_data(session, page_title, connection):
         return False
 
 def create_db_data():
+    print("Extraindo dados da liquipedia...")
     session = requests.Session()
     session.headers.update({
         'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/91.0.4472.124 Safari/537.36',
@@ -144,4 +145,6 @@ def create_db_data():
         time.sleep(2)
         
     connection.close()
-    
+
+if __name__ == "__main__":
+   create_db_data()
