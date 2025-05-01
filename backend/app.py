@@ -7,7 +7,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": [os.get_env('MY_FRONTEND')]}})
+CORS(app, resources={r"/*": {"origins": [os.getenv('MY_FRONTEND')]}})
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
