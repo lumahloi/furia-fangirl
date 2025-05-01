@@ -6,8 +6,9 @@ import App from './App';
 
 const theme = createTheme({
   palette: {
-    primary: {
-      main: '#1976d2',
+    text: {
+      primary: '#ffffff',
+      secondary: 'rgba(255, 255, 255, 0.7)',
     },
   },
 });

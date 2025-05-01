@@ -110,23 +110,23 @@ function App() {
         <Box
           sx={{ minHeight: "20vh", alignContent: "start", marginTop: "50px" }}
         >
-          <Typography variant="h5" color="white" fontWeight="bold">
+          <Typography variant="h5"  fontWeight="bold">
             NomeMuitoCriativo
           </Typography>
         </Box>
 
         <Box sx={{ display: "flex", flexDirection: "column", gap: 6 }}>
           <Box>
-            <Typography variant="h6" gutterBottom color="white">
+            <Typography variant="h6" gutterBottom >
               Desenvolvidor por
             </Typography>
-            <Typography variant="subtitle1" color="white">
+            <Typography variant="subtitle1" >
               Lumah Pereira
             </Typography>
           </Box>
 
           <Box>
-            <Typography variant="h6" gutterBottom color="white">
+            <Typography variant="h6" gutterBottom >
               Informações de contato
             </Typography>
             <Box sx={{ display: "flex", gap: 2 }}>
@@ -182,6 +182,7 @@ function App() {
                 sx={{
                   transition: "all 3s ease",
                   "& .MuiOutlinedInput-root": {
+                    color: "#3e3f3f",
                     borderRadius: 4,
                     "&.Mui-focused fieldset": {
                       borderColor: "#363737",
