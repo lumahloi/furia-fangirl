@@ -6,17 +6,31 @@ import {
   TextField,
   Button,
   CircularProgress,
+  Link,
 } from "@mui/material";
-import { LinkedIn, GitHub, Mail, Web, Send } from "@mui/icons-material";
+import {
+  LinkedIn,
+  GitHub,
+  Mail,
+  Web,
+  Send,
+  PictureAsPdf,
+} from "@mui/icons-material";
 import {
   chatBox,
-  userBubble,
   chatBoxBox,
+  userBubble,
   messageBox,
   breakText,
   userInput,
   buttonSubmit,
-} from "./styles/ComponentsStyles";
+  profileImageContainer,
+  textFieldStyles,
+  contactIcons,
+  sideBarContainer,
+  contactInfoContainer,
+  developerInfoContainer,
+} from "./styles/AppStyles";
 import BotAnswer from "./BotAnswer";
 import "./styles/App.css";
 
@@ -107,33 +121,56 @@ function App() {
   return (
     <Box sx={{ display: "flex", flexDirection: "row" }}>
       <Container sx={{ maxWidth: "20vw" }}>
-        <Box
-          sx={{ minHeight: "20vh", alignContent: "start", marginTop: "50px" }}
-        >
-          <Typography variant="h5"  fontWeight="bold">
-            NomeMuitoCriativo
+        <Box sx={sideBarContainer}>
+          <Typography variant="h5" fontWeight="bold">
+            FANGIRL
           </Typography>
         </Box>
 
-        <Box sx={{ display: "flex", flexDirection: "column", gap: 6 }}>
+        <Box sx={contactInfoContainer}>
           <Box>
-            <Typography variant="h6" gutterBottom >
-              Desenvolvidor por
+            <Typography variant="h6" gutterBottom>
+              Desenvolvido por
             </Typography>
-            <Typography variant="subtitle1" >
-              Lumah Pereira
-            </Typography>
+            <Box sx={developerInfoContainer}>
+              <Box sx={profileImageContainer}>
+                <img
+                  src="https://github.com/lumahloi.png"
+                  alt="Lumah Pereira Github"
+                  loading="lazy"
+                />
+              </Box>
+              <Typography variant="subtitle1">Lumah Pereira</Typography>
+            </Box>
           </Box>
 
           <Box>
-            <Typography variant="h6" gutterBottom >
+            <Typography variant="h6" gutterBottom>
               Informações de contato
             </Typography>
             <Box sx={{ display: "flex", gap: 2 }}>
-              <LinkedIn sx={{ color: "white" }} />
-              <GitHub sx={{ color: "white" }} />
-              <Mail sx={{ color: "white" }} />
-              <Web sx={{ color: "white" }} />
+              <Link href="https://www.linkedin.com/in/lumah-pereira/" target="_blank" rel="noopener noreferrer">
+                <LinkedIn sx={contactIcons} />
+              </Link>
+              <Link href="https://github.com/lumahloi" target="_blank" rel="noopener noreferrer">
+                <GitHub sx={contactIcons} />
+              </Link>
+              <Link
+                href="mailto:lumah.pereira26@gmail.com?subject=FANGIRL&body=Adorei o seu projeto!"
+                sx={contactIcons}
+              >
+                <Mail />
+              </Link>
+              <Link href="https://lumah-pereira.vercel.app/" target="_blank" rel="noopener noreferrer">
+                <Web sx={contactIcons} />
+              </Link>
+              <Link
+                href="lumah-pereira.pdf"
+                download="lumah-pereira.pdf"
+                sx={contactIcons}
+              >
+                <PictureAsPdf />
+              </Link>
             </Box>
           </Box>
         </Box>
@@ -179,19 +216,7 @@ function App() {
                 disabled={isLoading}
                 onChange={(e) => setInput(e.target.value)}
                 value={input}
-                sx={{
-                  transition: "all 3s ease",
-                  "& .MuiOutlinedInput-root": {
-                    color: "#3e3f3f",
-                    borderRadius: 4,
-                    "&.Mui-focused fieldset": {
-                      borderColor: "#363737",
-                    },
-                    "&:hover fieldset": {
-                      borderColor: "#5e6060",
-                    },
-                  },
-                }}
+                sx={textFieldStyles}
               />
               <Button
                 type="submit"
