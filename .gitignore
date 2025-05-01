@@ -1,4 +1,51 @@
-/.git
-/venv
-*.db
-*.env
+# Diretórios do Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Ambiente virtual
+venv/
+.env
+
+# Diretórios do Node.js
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+
+# Build do frontend
+frontend/.env.local
+frontend/.env.development
+frontend/.env.test
+frontend/.env.production
+frontend/build/
+frontend/.DS_Store
+frontend/coverage/
+
+# IDE/Editor
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Sistema
+.DS_Store
+Thumbs.db
