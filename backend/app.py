@@ -7,15 +7,30 @@ from dotenv import load_dotenv
 load_dotenv()
 
 app = Flask(__name__)
-CORS(app, resources={r"/*": {"origins": [os.getenv('MY_FRONTEND')]}})
+CORS(app, resources={
+    r"/api/*": {
+        "origins": [os.getenv('MY_FRONTEND'), "http://localhost:3000"],
+        "methods": ["GET", "POST", "OPTIONS"],
+        "allow_headers": ["Content-Type"]
+    }
+})
 
 @app.route('/', defaults={'path': ''})
+
 @app.route('/<path:path>')
 def serve(path):
     if path != "" and os.path.exists("frontend/build/" + path):
         return send_from_directory('frontend/build', path)
     else:
         return send_from_directory('frontend/build', 'index.html')
+    
+@app.route('/api/<path:path>', methods=['OPTIONS'])
+def options_handler(path):
+    return '', 200, {
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'GET, POST, OPTIONS',
+        'Access-Control-Allow-Headers': 'Content-Type'
+    }
 
 @app.route('/api/query', methods=['POST'])
 def handle_query():
