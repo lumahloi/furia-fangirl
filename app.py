@@ -1,10 +1,18 @@
-import scripts.utils as utils
+import scripts.utils as utils, os
 from scripts.create_db_data import create_db_data
-from flask import Flask, jsonify, request
+from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 
 app = Flask(__name__)
 CORS(app)
+
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists("frontend/build/" + path):
+        return send_from_directory('frontend/build', path)
+    else:
+        return send_from_directory('frontend/build', 'index.html')
 
 @app.route('/api/query', methods=['POST'])
 def handle_query():
@@ -41,5 +49,6 @@ def handle_query():
     except Exception as e:
         print(f"Error processing request: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
+    
 if __name__ == '__main__':
     app.run(debug=True)
