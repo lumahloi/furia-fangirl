@@ -8,21 +8,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-CORS(app, resources={
-    r"/api/*": {
-        "origins": "*",
-        "methods": ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-        "allow_headers": ["Content-Type", "Authorization"],
-        "supports_credentials": True
-    }
-})
-
-@app.after_request
-def after_request(response):
-    response.headers.add('Access-Control-Allow-Origin', '*')
-    response.headers.add('Access-Control-Allow-Headers', 'Content-Type,Authorization')
-    response.headers.add('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS')
-    return response
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=False)
 
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
@@ -35,21 +21,17 @@ def serve(path):
 @app.route('/api/query', methods=['POST', 'OPTIONS'])
 def handle_query():
     if request.method == 'OPTIONS':
-        response = jsonify()
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        response.headers.add("Access-Control-Allow-Headers", "Content-Type, Authorization")
-        response.headers.add("Access-Control-Allow-Methods", "POST, OPTIONS")
-        return response
+        return jsonify()
     
-    try: 
+    try:
         if utils.check_database_exists('liquipedia_data') == False:
             create_db_data()
-            
+        
         data = request.get_json()
         if not data or 'input' not in data:
             return jsonify({'error': 'Input field is required'}), 400
         user_question = data.get('input')
-            
+        
         answer_context = utils.find_page(user_question)
         if not answer_context:
             return jsonify({'error': 'Could not find appropriate page'}), 404
@@ -62,13 +44,12 @@ def handle_query():
         if not answer_user_question:
             return jsonify({'error': 'Could not generate answer'}), 500
         
-        response = jsonify({'response': answer_user_question})
-        response.headers.add("Access-Control-Allow-Origin", "*")
-        return response
+        return jsonify({'response': answer_user_question})
     
     except Exception as e:
         print(f"Error processing request: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
+ 
     
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
