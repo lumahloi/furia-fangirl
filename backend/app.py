@@ -8,15 +8,7 @@ load_dotenv()
 
 app = Flask(__name__)
 
-CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=False)
-
-@app.route('/', defaults={'path': ''})
-@app.route('/<path:path>')
-def serve(path):
-    if path != "" and os.path.exists("frontend/build/" + path):
-        return send_from_directory('frontend/build', path)
-    else:
-        return send_from_directory('frontend/build', 'index.html')
+CORS(app, origins=["https://furia-fangirl.vercel.app"], supports_credentials=False)
 
 @app.route('/api/query', methods=['POST', 'OPTIONS'])
 def handle_query():
@@ -50,6 +42,14 @@ def handle_query():
         print(f"Error processing request: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
  
+@app.route('/', defaults={'path': ''})
+@app.route('/<path:path>')
+def serve(path):
+    if path != "" and os.path.exists("frontend/build/" + path):
+        return send_from_directory('frontend/build', path)
+    else:
+        return send_from_directory('frontend/build', 'index.html')
+
     
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
