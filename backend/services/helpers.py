@@ -55,8 +55,10 @@ def find_page(question):
 def get_context(answer_context):
     try:
         print(f"Buscando contexto para a página: {answer_context}")
-        
-        connection = sqlite3.connect('./databases/liquipedia_data.db')
+        base_dir = os.path.dirname(os.path.abspath(__file__))
+        project_root = os.path.abspath(os.path.join(base_dir, '..'))
+        db_path = os.path.join(project_root, 'databases', 'liquipedia_data.db')
+        connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
         
         print("Conexão com o banco de dados estabelecida.")
