@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request, send_from_directory
 from services import database_service, helpers
+from .timeout import init_timeout_middleware
 from dotenv import load_dotenv
 from flask_cors import CORS
 import os
@@ -48,4 +49,12 @@ def serve_static_file(path):
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
-    app.run(host="0.0.0.0", port=port)
+    # Configurações para timeouts maiores
+    run_simple(
+        host='0.0.0.0',
+        port=port,
+        application=app,
+        threaded=True,
+        # Timeout de 300 segundos (5 minutos)
+        request_handler=werkzeug.serving.WSGIRequestHandler
+    )
