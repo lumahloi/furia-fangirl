@@ -1,9 +1,8 @@
 from flask import Flask, jsonify, request, send_from_directory
-from flask_cors import CORS
+from services import database_service, helpers
 from dotenv import load_dotenv
+from flask_cors import CORS
 import os
-import scripts.utils as utils
-from scripts.create_db_data import create_db_data
 
 load_dotenv()
 
@@ -13,23 +12,23 @@ CORS(app)
 @app.route('/api/query', methods=['POST'])
 def handle_query():
     try:
-        if not utils.check_database_exists('liquipedia_data'):
-            create_db_data()
+        if not helpers.check_database_exists('liquipedia_data'):
+            database_service.create_db_data()
         
         data = request.get_json()
         if not data or 'input' not in data:
             return jsonify({'error': 'Input field is required'}), 400
-        user_question = data.get('input')
         
-        answer_context = utils.find_page(user_question)
+        user_question = data.get('input')
+        answer_context = helpers.find_page(user_question)
         if not answer_context:
             return jsonify({'error': 'Could not find appropriate page'}), 404
         
-        context = utils.get_context(answer_context)
+        context = helpers.get_context(answer_context)
         if not context:
             return jsonify({'error': 'Could not retrieve page context'}), 404
         
-        answer_user_question = utils.get_answer(context, user_question)
+        answer_user_question = helpers.get_answer(context, user_question)
         if not answer_user_question:
             return jsonify({'error': 'Could not generate answer'}), 500
         

@@ -1,12 +1,9 @@
+from ..services.openai_service import query_openai
 import os, sqlite3
-from backend.src.services.ai.openai_service import query_openai
 
 def check_database_exists(db_name):
     db_path = f"./databases/{db_name}.db"
-    if os.path.exists(db_path) and os.path.isfile(db_path):
-        return True
-    else:
-        return False
+    return os.path.exists(db_path) and os.path.isfile(db_path)
     
 def find_page(question):
     prompt_relevant_page = (f"""
@@ -44,6 +41,4 @@ def get_answer(context, user_question):
         Regras: Seja extremamente conciso (máx. 3 frases); Responda APENAS com fatos do contexto; Formate datas/resultados claramente; Se não souber, diga apenas 'Não há dados suficientes'.
     """)
     
-    answer_user_question = query_openai(prompt_answer_user_question)
-    
-    return answer_user_question
+    return query_openai(prompt_answer_user_question)

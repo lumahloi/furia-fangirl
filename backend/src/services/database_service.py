@@ -2,15 +2,9 @@ import requests, sqlite3, json, time, re
 from bs4 import BeautifulSoup
 
 PAGES = [
-    "FURIA",
-    "FURIA/Results",
-    "FURIA/Matches",
-    "FURIA_Academy",
-    "FURIA_Academy/Results",
-    "FURIA_Academy/Matches",
-    "FURIA_Female",
-    "FURIA_Female/Results",
-    "FURIA_Female/Matches"
+    "FURIA", "FURIA/Results", "FURIA/Matches",
+    "FURIA_Academy", "FURIA_Academy/Results", "FURIA_Academy/Matches",
+    "FURIA_Female", "FURIA_Female/Results", "FURIA_Female/Matches"
 ]
 
 def setup_database():
@@ -50,11 +44,9 @@ def clean_html(raw_html):
             element.decompose()
         
         text = soup.get_text(' ', strip=True)
-        
         text = ' '.join(text.split()) 
-        text = re.sub(r'\s+', ' ', text).strip() 
         
-        return text
+        return re.sub(r'\s+', ' ', text).strip() 
     
     except Exception as e:
         print(f"Erro ao limpar HTML: {str(e)}")
@@ -76,55 +68,21 @@ def extract_page_data(session, page_title, connection):
     
     try:
         response = session.get(api_url, params=params)
-    
         if response.status_code == 200:
             data = response.json()
-            
-            if not isinstance(data, dict):
-                print(f"Resposta não é um dicionário válido para {page_title}")
-                return None
-                
-            if 'error' in data:
-                print(f"Erro na página {page_title}: {data.get('error', {}).get('info', 'Erro desconhecido')}")
-                return None
-            
-            parse_data = data.get('parse', {})
-            if not parse_data:
-                print(f"Dados parse vazios para {page_title}")
-                return None
-                
-            if isinstance(parse_data.get('text'), dict):
-                raw_html = parse_data['text'].get('*', '')
-            elif isinstance(parse_data.get('text'), str):
-                raw_html = parse_data['text']
-            else:
-                print(f"Formato de texto inválido para {page_title}")
-                print(f"Estrutura recebida: {type(parse_data.get('text'))}")
-                return None
-            
-            if not raw_html:
-                print(f"Conteúdo vazio para {page_title}")
-                return None
-            
-            cleaned_content = clean_html(raw_html)
-            
-            cursor = connection.cursor()
-            cursor.execute('''
-                INSERT OR REPLACE INTO extracted_pages 
-                (page_title, content) 
-                VALUES (?, ?)''', 
-                (page_title, cleaned_content)
-            )
-            
-            connection.commit()
-            print(f"Página {page_title} extraída e armazenada com sucesso!")
-            return True
-        else:
-            print(f"Erro HTTP {response.status_code} para {page_title}")
-            return False
-            
-    except json.JSONDecodeError as e:
-        print(f"Erro ao decodificar JSON para {page_title}: {str(e)}")
+            raw_html = data.get('parse', {}).get('text', {}).get('*', '')
+            if raw_html:
+                cleaned_content = clean_html(raw_html)
+                cursor = connection.cursor()
+                cursor.execute('''
+                    INSERT OR REPLACE INTO extracted_pages 
+                    (page_title, content) 
+                    VALUES (?, ?)''', 
+                    (page_title, cleaned_content)
+                )
+                connection.commit()
+                print(f"Página {page_title} extraída e armazenada com sucesso!")
+                return True
         return False
     except Exception as e:
         print(f"Erro ao processar {page_title}: {str(e)}")
@@ -145,6 +103,3 @@ def create_db_data():
         time.sleep(2)
         
     connection.close()
-
-if __name__ == "__main__":
-   create_db_data()
