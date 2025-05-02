@@ -1,22 +1,19 @@
-import scripts.utils as utils, os
-from scripts.create_db_data import create_db_data
 from flask import Flask, jsonify, request, send_from_directory
 from flask_cors import CORS
 from dotenv import load_dotenv
+import os
+import scripts.utils as utils
+from scripts.create_db_data import create_db_data
 
 load_dotenv()
 
 app = Flask(__name__)
+CORS(app)
 
-CORS(app, origins=["https://furia-fangirl.vercel.app"], supports_credentials=False)
-
-@app.route('/api/query', methods=['POST', 'OPTIONS'])
+@app.route('/api/query', methods=['POST'])
 def handle_query():
-    if request.method == 'OPTIONS':
-        return jsonify()
-    
     try:
-        if utils.check_database_exists('liquipedia_data') == False:
+        if not utils.check_database_exists('liquipedia_data'):
             create_db_data()
         
         data = request.get_json()
@@ -41,7 +38,7 @@ def handle_query():
     except Exception as e:
         print(f"Error processing request: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
- 
+
 @app.route('/', defaults={'path': ''})
 @app.route('/<path:path>')
 def serve(path):
@@ -50,7 +47,6 @@ def serve(path):
     else:
         return send_from_directory('frontend/build', 'index.html')
 
-    
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
