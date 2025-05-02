@@ -3,7 +3,11 @@ from services import helpers
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "https://furia-fangirl.vercel.app"}})
+CORS(app, resources={r"/api/*": {
+    "origins": "https://furia-fangirl.vercel.app",
+    "allow_headers": "Content-Type", 
+    "allow_methods": ["GET", "POST", "OPTIONS"]
+}})
 
 @app.route('/api/query', methods=['POST', 'OPTIONS'])
 def handle_query():
