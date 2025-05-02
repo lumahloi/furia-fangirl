@@ -71,9 +71,9 @@ function App() {
     if (!input.trim()) return;
 
     const userMessage: Message = {
-      id: Date.now(),
-      text: input,
-      isUser: true,
+        id: Date.now(),
+        text: input,
+        isUser: true,
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -81,43 +81,44 @@ function App() {
     setIsLoading(true);
 
     try {
-      if (!apiUrl) {
-        throw new Error("API URL is not defined. Please check your environment variables.");
-      }
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ input: input }),
-        mode: 'cors'
-      });
+        if (!apiUrl) {
+            throw new Error("API URL is not defined. Please check your environment variables.");
+        }
+        
+        const res = await fetch(apiUrl, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ input: input }),
+            mode: 'cors',
+        });
 
-      if (!res.ok) {
-        throw new Error(`HTTP error! status: ${res.status}`);
-      }
+        if (!res.ok) {
+            throw new Error(`HTTP error! status: ${res.status}`);
+        }
 
-      const data = await res.json();
+        const data = await res.json();
 
-      const botMessage: Message = {
-        id: Date.now() + 1,
-        text: data.response,
-        isUser: false,
-      };
+        const botMessage: Message = {
+            id: Date.now() + 1,
+            text: data.response,
+            isUser: false,
+        };
 
-      setMessages((prev) => [...prev, botMessage]);
+        setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
-      console.error("Error:", error);
-      const errorMessage: Message = {
-        id: Date.now() + 1,
-        text: "Ocorreu um erro ao processar sua solicitação.",
-        isUser: false,
-      };
-      setMessages((prev) => [...prev, errorMessage]);
+        console.error("Error:", error);
+        const errorMessage: Message = {
+            id: Date.now() + 1,
+            text: "Ocorreu um erro ao processar sua solicitação. Por favor, tente novamente mais tarde.",
+            isUser: false,
+        };
+        setMessages((prev) => [...prev, errorMessage]);
     } finally {
-      setIsLoading(false);
+        setIsLoading(false);
     }
-  };
+};
 
   const messagesEndRef = React.useRef<HTMLDivElement>(null);
 
