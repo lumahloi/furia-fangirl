@@ -1,4 +1,4 @@
-import requests, sqlite3, json, time, re
+import requests, sqlite3, time, re
 from bs4 import BeautifulSoup
 
 PAGES = [

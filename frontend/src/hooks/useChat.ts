@@ -43,52 +43,66 @@ export default function useChat() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
-
+  
     const userMessage = {
       id: Date.now(),
       text: input || "", // garante que é string
       isUser: true,
       isFromHistory: false,
     };
-
+  
     setMessages((prev) => [...prev, userMessage]);
     setInput("");
     setIsLoading(true);
-
+  
     try {
       if (!apiUrl) throw new Error("API URL is not defined");
+  
+      const res = await Promise.race([
+        fetch(apiUrl, {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ input }),
+        }),
+        new Promise<never>((_, reject) =>
+          setTimeout(() => reject(new Error("Request timed out")), 15000) // 15 segundos de timeout
+        ),
+      ]);
 
-      const res = await fetch(apiUrl, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ input }),
-      });
-
+      if (!(res instanceof Response)) {
+        throw new Error("Unexpected response type");
+      }
+  
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
-
-      const data = await res.json();
+  
+      const data: { response: string } = await res.json();
+  
       const botMessage = {
         id: Date.now() + 1,
-        text: data.response || "", // garante que é string
+        text: data.response || "", 
         isUser: false,
         isFromHistory: false,
       };
-
+  
       setMessages((prev) => [...prev, botMessage]);
-    } catch (error) {
+    } catch (error: unknown) {
       console.error("Error:", error);
+    
       const errorMessage = {
         id: Date.now() + 1,
         text:
-          "Não estou me sentindo muito bem no momento, que tal tentar me perguntar de novo mais tarde?",
+          error instanceof Error && error.message === "Request timed out"
+            ? "Desculpe, a resposta está demorando mais do que o esperado. Tente novamente mais tarde."
+            : "Não estou me sentindo muito bem no momento, que tal tentar me perguntar de novo mais tarde?",
         isUser: false,
         isFromHistory: false,
       };
+  
       setMessages((prev) => [...prev, errorMessage]);
     } finally {
       setIsLoading(false);
     }
-  };
+  };  
 
   return {
     input,

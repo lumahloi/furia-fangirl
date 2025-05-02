@@ -1,21 +1,13 @@
-from flask import Flask, jsonify, request, send_from_directory
-from services import database_service, helpers
-from .timeout import init_timeout_middleware
-from dotenv import load_dotenv
+from flask import Flask, jsonify, request
+from services import helpers
 from flask_cors import CORS
-import os
-
-load_dotenv()
 
 app = Flask(__name__)
-CORS(app)
+CORS(app, origins=["furia-fangirl.vercel.app"])
 
 @app.route('/api/query', methods=['POST'])
 def handle_query():
     try:
-        if helpers.check_database_exists('liquipedia_data') == False:
-            database_service.create_db_data()
-        
         data = request.get_json()
         if not data or 'input' not in data:
             return jsonify({'error': 'Input field is required'}), 400
@@ -38,23 +30,3 @@ def handle_query():
     except Exception as e:
         print(f"Error processing request: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
-
-@app.route('/')
-def serve_react():
-    return send_from_directory(app.static_folder, 'index.html')
-
-@app.route('/<path:path>')
-def serve_static_file(path):
-    return send_from_directory(app.static_folder, path)
-
-if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 10000))
-    # Configurações para timeouts maiores
-    run_simple(
-        host='0.0.0.0',
-        port=port,
-        application=app,
-        threaded=True,
-        # Timeout de 300 segundos (5 minutos)
-        request_handler=werkzeug.serving.WSGIRequestHandler
-    )
