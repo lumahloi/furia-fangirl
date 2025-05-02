@@ -6,49 +6,49 @@ export default function useChat() {
   const [input, setInput] = useState("");
   const [isLoading, setIsLoading] = useState(false);
 
-  // Função auxiliar para a mensagem padrão
-  const getDefaultMessage = (): Message[] => [
+  const getDefaultMessage = (): (Message & { isFromHistory: boolean })[] => [
     {
       id: 1,
       text: "Olá, eu sou a Fani! Sou a maior fã do time de CS da FURIA do universo ٩(^ᗜ^ )و ´-!! Me faça qualquer pergunta sobre que vou te responder.",
       isUser: false,
-    }
+      isFromHistory: true,
+    },
   ];
 
-  const [messages, setMessages] = useState<Message[]>(() => {
+  const [messages, setMessages] = useState<(Message & { isFromHistory: boolean })[]>(() => {
     const savedMessages = localStorage.getItem("chatMessages");
-    
+
     if (savedMessages) {
       try {
-        // Decodificação segura para caracteres especiais
         const decodedMessages = decodeURIComponent(escape(window.atob(savedMessages)));
-        return JSON.parse(decodedMessages);
+        const parsedMessages: Message[] = JSON.parse(decodedMessages);
+        return parsedMessages.map((msg) => ({ ...msg, isFromHistory: true }));
       } catch (error) {
         console.error("Erro ao decodificar mensagens:", error);
-        // Fallback para mensagem padrão se houver erro
         return getDefaultMessage();
       }
     }
-    
+
     return getDefaultMessage();
   });
 
-  // Ao salvar no localStorage (em outro useEffect):
   useEffect(() => {
-    if (messages.length > 0) {
-      const encodedMessages = window.btoa(unescape(encodeURIComponent(JSON.stringify(messages))));
-      localStorage.setItem("chatMessages", encodedMessages);
-    }
+    const messagesToSave = messages.map(({ isFromHistory, ...rest }) => rest);
+    const encodedMessages = window.btoa(
+      unescape(encodeURIComponent(JSON.stringify(messagesToSave)))
+    );
+    localStorage.setItem("chatMessages", encodedMessages);
   }, [messages]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!input.trim()) return;
 
-    const userMessage: Message = {
+    const userMessage = {
       id: Date.now(),
       text: input,
       isUser: true,
+      isFromHistory: false,
     };
 
     setMessages((prev) => [...prev, userMessage]);
@@ -67,19 +67,21 @@ export default function useChat() {
       if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
 
       const data = await res.json();
-      const botMessage: Message = {
+      const botMessage = {
         id: Date.now() + 1,
         text: data.response,
         isUser: false,
+        isFromHistory: false,
       };
 
       setMessages((prev) => [...prev, botMessage]);
     } catch (error) {
       console.error("Error:", error);
-      const errorMessage: Message = {
+      const errorMessage = {
         id: Date.now() + 1,
         text: "Não estou me sentindo muito bem no momento, que tal tentar me perguntar de novo mais tarde?",
         isUser: false,
+        isFromHistory: false,
       };
       setMessages((prev) => [...prev, errorMessage]);
     } finally {

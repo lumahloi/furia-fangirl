@@ -7,25 +7,37 @@ import {
 } from "../../styles/components/BotAnswer.styles";
 import { Box, Typography, Avatar } from "@mui/material";
 import { useEffect, useRef, useState } from "react";
+import { keyframes } from '@mui/system';
 
 interface BotAnswerProps {
   message: string;
-  skipTypewriter?: boolean; // Nome mais explícito
+  skipTypewriter?: boolean;
   typingSpeed?: number;
+  fromHistoryWithCss?: boolean; // novo prop para diferenciar
 }
 
 function BotAnswer({
   message,
   skipTypewriter = true,
   typingSpeed = 50,
+  fromHistoryWithCss = false,
 }: BotAnswerProps) {
   const messageEndRef = useRef<HTMLDivElement>(null);
-
-  const cleanMessage = message.replace(/\bundefined\b/g, '');
-  
+  const cleanMessage = message.replace(/\bundefined\b/g, "");
   const [displayedMessage, setDisplayedMessage] = useState(
     skipTypewriter ? cleanMessage : ""
   );
+  // Efeito de máquina de escrever
+  const typewriter = keyframes`
+  from { width: 0 }
+  to { width: 100% }
+  `;
+
+  // Efeito de piscar do cursor
+  const blinkCaret = keyframes`
+  from, to { border-color: transparent }
+  50% { border-color: #ffffff }
+  `;
 
   useEffect(() => {
     messageEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -33,11 +45,10 @@ function BotAnswer({
 
   useEffect(() => {
     if (skipTypewriter) {
-      // já inicializado no estado; nada a fazer
+      setDisplayedMessage(cleanMessage);
       return;
     }
 
-    setDisplayedMessage("");
     let currentIndex = 0;
     const typingInterval = setInterval(() => {
       if (currentIndex < cleanMessage.length) {
@@ -60,7 +71,14 @@ function BotAnswer({
         </Typography>
       </Box>
 
-      <Box sx={messageBubble}>
+      <Box
+        sx={{
+          ...messageBubble,
+          ...(fromHistoryWithCss && {
+            animation: `${typewriter} 0.7s steps(20, end), ${blinkCaret} 0.3s step-end infinite`,
+          }),
+        }}
+      >
         <Typography variant="body1" sx={messageText}>
           {displayedMessage}
         </Typography>
@@ -70,6 +88,5 @@ function BotAnswer({
     </Box>
   );
 }
-
 
 export default BotAnswer;

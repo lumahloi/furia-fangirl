@@ -8,8 +8,12 @@ import { Box, Typography } from "@mui/material";
 import { Message } from "../../types/messages";
 import BotAnswer from "../BotAnswer";
 
+interface MessageWithHistory extends Message {
+  isFromHistory?: boolean;
+}
+
 interface MessageListProps {
-  messages: Message[];
+  messages: MessageWithHistory[];
   isLoading: boolean;
 }
 
@@ -31,12 +35,15 @@ export default function MessageList({ messages, isLoading }: MessageListProps) {
           <BotAnswer
             key={message.id}
             message={message.text}
-            skipTypewriter={!!localStorage.getItem("chatMessages")}
+            skipTypewriter={message.isFromHistory ?? true}
           />
         )
       )}
       {isLoading && (
-        <BotAnswer message="Huum, deixa eu pensar um pouquinho..." />
+        <BotAnswer
+          message="Huum, deixa eu pensar um pouquinho..."
+          skipTypewriter={false}
+        />
       )}
     </Box>
   );

@@ -71,18 +71,6 @@ export const messageBubble = {
   maxWidth: "100%"
 };
 
-// Efeito de máquina de escrever
-export const typewriter = keyframes`
-  from { width: 0 }
-  to { width: 100% }
-`;
-
-// Efeito de piscar do cursor
-export const blinkCaret = keyframes`
-  from, to { border-color: transparent }
-  50% { border-color: #ffffff }
-`;
-
 export const messageText = {
   color: theme.palette.secondary.main,
   whiteSpace: "pre-wrap",
@@ -91,9 +79,5 @@ export const messageText = {
   overflow: "hidden",
   display: "inline-block",
   verticalAlign: "top",
-  animation: `
-    ${typewriter} 0.7s steps(20, end),
-    ${blinkCaret} 0.3s step-end infinite
-  `,
   animationFillMode: "forwards" // Adicione isso para manter o estado final
 };
