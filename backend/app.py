@@ -3,9 +3,9 @@ from services import helpers
 from flask_cors import CORS
 
 app = Flask(__name__)
-CORS(app, origins=["furia-fangirl.vercel.app"])
+CORS(app, resources={r"/api/*": {"origins": "https://furia-fangirl.vercel.app"}})
 
-@app.route('/api/query', methods=['POST'])
+@app.route('/api/query', methods=['POST', 'OPTIONS'])
 def handle_query():
     try:
         data = request.get_json()
@@ -30,3 +30,6 @@ def handle_query():
     except Exception as e:
         print(f"Error processing request: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
+    
+if __name__ == '__main__':
+    app.run(debug=True)
