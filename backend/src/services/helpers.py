@@ -1,9 +1,17 @@
-from ..services.openai_service import query_openai
+from .openai_service import query_openai
 import os, sqlite3
 
 def check_database_exists(db_name):
-    db_path = f"./databases/{db_name}.db"
-    return os.path.exists(db_path) and os.path.isfile(db_path)
+    current_dir = os.path.dirname(os.path.abspath(__file__))
+    project_root = os.path.abspath(os.path.join(current_dir, '..', '..'))
+    db_path = os.path.join(project_root, 'src', 'data', 'databases', f'{db_name}.db')
+
+    if os.path.exists(db_path) and os.path.isfile(db_path):
+        print(f"Arquivo encontrado: {db_path}")
+        return True
+    else:
+        print(f"Arquivo não encontrado: {db_path}")
+        return False
     
 def find_page(question):
     prompt_relevant_page = (f"""
