@@ -6,12 +6,22 @@ app = Flask(__name__)
 CORS(app, resources={r"/api/*": {
     "origins": "https://furia-fangirl.vercel.app",
     "allow_headers": "Content-Type", 
-    "allow_methods": ["GET", "POST", "OPTIONS"]
+    "allow_methods": ["GET", "POST", "OPTIONS", "PUT", "DELETE", "PATCH"]
 }})
 
 @app.route('/api/query', methods=['POST', 'OPTIONS'])
 def handle_query():
     try:
+        if request.method == 'OPTIONS':
+            response = jsonify({'message': 'Preflight request accepted'})
+            response.headers.add('Access-Control-Allow-Origin', 'https://furia-fangirl.vercel.app')
+            response.headers.add('Access-Control-Allow-Headers', 'Content-Type')
+            response.headers.add('Access-Control-Allow-Methods', 'POST')
+            return response
+        
+        if not request.is_json:
+            return jsonify({'error': 'Content-Type must be application/json'}), 415
+        
         data = request.get_json()
         if not data or 'input' not in data:
             return jsonify({'error': 'Input field is required'}), 400
@@ -29,7 +39,9 @@ def handle_query():
         if not answer_user_question:
             return jsonify({'error': 'Could not generate answer'}), 500
         
-        return jsonify({'response': answer_user_question})
+        response = jsonify({'response': answer_user_question})
+        response.headers.add('Access-Control-Allow-Origin', 'https://furia-fangirl.vercel.app')
+        return response
     
     except Exception as e:
         print(f"Error processing request: {str(e)}")

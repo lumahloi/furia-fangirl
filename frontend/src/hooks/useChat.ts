@@ -44,9 +44,12 @@ export default function useChat() {
     e.preventDefault();
     if (!input.trim()) return;
   
+    const userInput = typeof input === 'string' ? input.trim() : '';
+    if (!userInput) return;
+  
     const userMessage = {
       id: Date.now(),
-      text: input || "", // garante que é string
+      text: userInput,
       isUser: true,
       isFromHistory: false,
     };
@@ -58,14 +61,19 @@ export default function useChat() {
     try {
       if (!apiUrl) throw new Error("API URL is not defined");
   
+      const requestBody = JSON.stringify({ input: userInput });
+      
       const res = await Promise.race([
         fetch(apiUrl, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ input }),
+          headers: { 
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+          },
+          body: requestBody,
         }),
         new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Request timed out")), 15000) // 15 segundos de timeout
+          setTimeout(() => reject(new Error("Request timed out")), 15000)
         ),
       ]);
 
