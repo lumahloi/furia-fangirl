@@ -49,3 +49,5 @@ frontend/coverage/
 # Sistema
 .DS_Store
 Thumbs.db
+
+*.rest
