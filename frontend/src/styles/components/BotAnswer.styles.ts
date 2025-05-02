@@ -1,4 +1,5 @@
 import { keyframes } from '@mui/system';
+import theme from "../../config/theme"
 
 export const fadeIn = keyframes`
   from {
@@ -27,7 +28,10 @@ export const botAnswerContainer = {
   display: "flex",
   flexDirection: "column",
   gap: 2,
-  animation: `${fadeIn} 0.5s ease-out forwards`,
+  transition: "all 0.3s ease",
+  "&:hover": {
+    transform: "translateY(-2px)",
+  },
 };
 
 export const avatarStyles = {
@@ -48,25 +52,23 @@ export const avatarStyles = {
       boxShadow: '0 6px 12px rgba(0,0,0,0.3)'
     }
   },
-  backgroundColor: '#817d4e'
+  backgroundColor: theme.palette.primary.contrastText
 };
 
 export const botNameStyles = {
   transition: "all 0.3s ease",
-  color: "#3e3f3f",
+  color: theme.palette.primary.light,
 };
 
 export const messageBubble = {
   p: 2,
-  backgroundColor: "#363737",
+  backgroundColor: theme.palette.primary.light,
   borderRadius: 10,
   whiteSpace: "pre-wrap",
   wordBreak: "break-word",
   overflowWrap: "break-word",
-  transition: "all 0.3s ease",
-  "&:hover": {
-    transform: "translateY(-2px)",
-  },
+  width: "fit-content",
+  maxWidth: "100%"
 };
 
 // Efeito de máquina de escrever
@@ -82,7 +84,7 @@ export const blinkCaret = keyframes`
 `;
 
 export const messageText = {
-  color: "#ffffff",
+  color: theme.palette.secondary.main,
   whiteSpace: "pre-wrap",
   wordBreak: "break-word",
   lineHeight: 1.6,

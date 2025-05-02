@@ -1,5 +1,5 @@
 import os, sqlite3
-from scripts.query_openai import query_openai
+from backend.src.services.ai.openai_service import query_openai
 
 def check_database_exists(db_name):
     db_path = f"./databases/{db_name}.db"

@@ -39,13 +39,13 @@ def handle_query():
         print(f"Error processing request: {str(e)}")
         return jsonify({'error': 'Internal server error'}), 500
 
-@app.route('/', defaults={'path': ''})
+@app.route('/')
+def serve_react():
+    return send_from_directory(app.static_folder, 'index.html')
+
 @app.route('/<path:path>')
-def serve(path):
-    if path != "" and os.path.exists("frontend/build/" + path):
-        return send_from_directory('frontend/build', path)
-    else:
-        return send_from_directory('frontend/build', 'index.html')
+def serve_static_file(path):
+    return send_from_directory(app.static_folder, path)
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
