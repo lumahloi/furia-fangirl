@@ -46,7 +46,7 @@ export default function useChat() {
 
     const userMessage = {
       id: Date.now(),
-      text: input,
+      text: input || "", // garante que é string
       isUser: true,
       isFromHistory: false,
     };
@@ -69,7 +69,7 @@ export default function useChat() {
       const data = await res.json();
       const botMessage = {
         id: Date.now() + 1,
-        text: data.response,
+        text: data.response || "", // garante que é string
         isUser: false,
         isFromHistory: false,
       };
@@ -79,7 +79,8 @@ export default function useChat() {
       console.error("Error:", error);
       const errorMessage = {
         id: Date.now() + 1,
-        text: "Não estou me sentindo muito bem no momento, que tal tentar me perguntar de novo mais tarde?",
+        text:
+          "Não estou me sentindo muito bem no momento, que tal tentar me perguntar de novo mais tarde?",
         isUser: false,
         isFromHistory: false,
       };

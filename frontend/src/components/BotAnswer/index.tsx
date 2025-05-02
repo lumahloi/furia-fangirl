@@ -23,7 +23,7 @@ function BotAnswer({
   fromHistoryWithCss = false,
 }: BotAnswerProps) {
   const messageEndRef = useRef<HTMLDivElement>(null);
-  const cleanMessage = message.replace(/\bundefined\b/g, "");
+  const cleanMessage = (message ?? "").replace(/\bundefined\b/g, "");
   const [displayedMessage, setDisplayedMessage] = useState(
     skipTypewriter ? cleanMessage : ""
   );
@@ -80,7 +80,7 @@ function BotAnswer({
         }}
       >
         <Typography variant="body1" sx={messageText}>
-          {displayedMessage}
+          {cleanMessage}
         </Typography>
       </Box>
 
