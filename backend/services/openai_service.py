@@ -1,10 +1,12 @@
 from openai import OpenAI
 import os
 
+load_dotenv()
+
 def query_openai(prompt):
     try:
         print("Conectado com sucesso ao OPENAI...")
-        client = OpenAI(api_key=os.environ('OPENAI_KEY'))
+        client = OpenAI(api_key=os.environ['OPENAI_KEY'])
 
         response = client.chat.completions.create(
             model="gpt-4-turbo-preview",
