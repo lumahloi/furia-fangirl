@@ -6,13 +6,32 @@ import {
 } from "../../styles/components/Sidebar.styles";
 import { LinkedIn, GitHub, Mail, Web, PictureAsPdf } from "@mui/icons-material";
 import { Box, Typography, Link } from "@mui/material";
-import theme from "../../config/theme"
+import theme from "../../config/theme";
 
 export default function ContactInfo() {
   return (
     <Box sx={contactInfoContainer}>
       <Box>
-        <Typography variant="h6" gutterBottom sx={{ color: theme.palette.primary.contrastText }}>
+        <Link
+          href="https://furia-fangirl-nyfe.vercel.app/docs/introducao" target="_blank"
+          underline="none"
+        >
+          <Typography
+            variant="h6"
+            gutterBottom
+            sx={{ color: theme.palette.primary.contrastText }}
+          >
+            Documentação
+          </Typography>
+        </Link>
+      </Box>
+
+      <Box>
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{ color: theme.palette.primary.contrastText }}
+        >
           Desenvolvido por
         </Typography>
         <Box sx={developerInfoContainer}>
@@ -23,12 +42,21 @@ export default function ContactInfo() {
               loading="lazy"
             />
           </Box>
-          <Typography variant="subtitle1" sx={{ color: theme.palette.secondary.main }}>Lumah Pereira</Typography>
+          <Typography
+            variant="subtitle1"
+            sx={{ color: theme.palette.secondary.main }}
+          >
+            Lumah Pereira
+          </Typography>
         </Box>
       </Box>
 
       <Box>
-        <Typography variant="h6" gutterBottom sx={{ color: theme.palette.primary.contrastText }}>
+        <Typography
+          variant="h6"
+          gutterBottom
+          sx={{ color: theme.palette.primary.contrastText }}
+        >
           Informações de contato
         </Typography>
         <Box sx={{ display: "flex", gap: 2 }}>
