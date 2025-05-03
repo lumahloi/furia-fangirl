@@ -6,6 +6,8 @@ sidebar_position: 3
 A estrutura de pastas do projeto é organizada da seguinte maneira:
 ```bash
     furia-fangirl/
+    ├── documentation/                → documentação
+    │   └── ...
     ├── backend/                      → código Flask
     │   ├── data/
     │   │   └── databases/
@@ -16,8 +18,6 @@ A estrutura de pastas do projeto é organizada da seguinte maneira:
     │   ├── Procfile
     │   └── requirements.txt
     ├── frontend/                     → código React
-    │   ├── documentation/            → documentação
-    │   │   └── ...
     │   ├── public/
     │   │   └── ...
     │   ├── src/
