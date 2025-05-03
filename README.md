@@ -1,5 +1,5 @@
 # Fani, a Fangirl
-[![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#)
+[![React](https://img.shields.io/badge/React-%2320232a.svg?logo=react&logoColor=%2361DAFB)](#) [![TypeScript](https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=fff)](#) [![Flask](https://img.shields.io/badge/Flask-000?logo=flask&logoColor=fff)](#) [![SQLite](https://img.shields.io/badge/SQLite-%2307405e.svg?logo=sqlite&logoColor=white)](#) [![ChatGPT](https://img.shields.io/badge/ChatGPT-74aa9c?logo=openai&logoColor=white)](#) [![Vercel](https://img.shields.io/badge/Vercel-%23000000.svg?logo=vercel&logoColor=white)](#) [![Docusaurus](https://img.shields.io/badge/Docusaurus-3ECC5F?logo=docusaurus&logoColor=fff)](#) [![Python](https://img.shields.io/badge/Python-3776AB?logo=python&logoColor=fff)](#) [![Website](https://img.shields.io/website-up-down-green-red/http/shields.io.svg)](https://shields.io/)
 
 **Fani, a Fangirl** is a ChatBot made especially for fans of **FURIA**'s **CS** teams who want to know all the facts about them. No more opening 300 screens to ask questions about your favorite team or looking for that information you can't find anywhere else, just ask **Fani** and the history of your messages will be saved.
 
@@ -11,7 +11,7 @@
 - Interpret the context of the message, resulting in the correct choice of the database to be used;
 - Respect the rules and follow the context of answering only questions related to FURIA.
 
-## Como rodar localmente
+## How to run locally
 A seguir, o passo a passo de reproduzir a aplicação localmente em sua máquina.
 
 ### Pre-requisites
@@ -83,7 +83,7 @@ Content-Type: application/json
 }
 ```
 
-#### Exemplo de resposta
+#### Response example
 ```bash
 {
   "response": "O squad atual da FURIA no CS:GO \u00e9 composto por Yuri \"yuurih\" Boian, Kaike 
