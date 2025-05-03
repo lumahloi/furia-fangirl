@@ -59,7 +59,7 @@ export default function useChat() {
     setIsLoading(true);
   
     try {
-      if (!apiUrl) throw new Error("API URL is not defined");
+      if (!apiUrl) throw new Error("A URL da API não está definida!");
   
       const requestBody = JSON.stringify({ input: userInput });
       
@@ -73,15 +73,15 @@ export default function useChat() {
           body: requestBody,
         }),
         new Promise<never>((_, reject) =>
-          setTimeout(() => reject(new Error("Request timed out")), 15000)
+          setTimeout(() => reject(new Error("Houve erro ao requisitar a API.")), 15000)
         ),
       ]);
 
       if (!(res instanceof Response)) {
-        throw new Error("Unexpected response type");
+        throw new Error("Tipo da resposta inesperada.");
       }
   
-      if (!res.ok) throw new Error(`HTTP error! status: ${res.status}`);
+      if (!res.ok) throw new Error(`Erro HTTP! Status: ${res.status}`);
   
       const data: { response: string } = await res.json();
   

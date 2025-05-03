@@ -8,10 +8,8 @@ def check_database_exists(db_name):
         db_path = os.path.join(project_root, 'src', 'data', 'databases', f'{db_name}.db')
 
         if os.path.exists(db_path) and os.path.isfile(db_path):
-            print(f"Arquivo encontrado: {db_path}")
             return True
         else:
-            print(f"Arquivo não encontrado: {db_path}")
             return False
     except Exception as e:
         print(f"Erro ao verificar a existência do banco de dados {db_name}: {str(e)}")
@@ -19,7 +17,6 @@ def check_database_exists(db_name):
     
 def find_page(question):
     try:
-        print(f"Procurando página relevante para a pergunta: {question}")
         
         prompt_relevant_page = (f"""
             Analise este contexto sobre páginas que contém informações da FURIA no CS:GO e CS2:
@@ -45,7 +42,6 @@ def find_page(question):
             print(f"Não foi possível encontrar uma resposta relevante para a pergunta: {question}")
             return None
         
-        print(f"Página relevante encontrada: {response}")
         return response
     
     except Exception as e:
@@ -60,8 +56,6 @@ def get_context(answer_context):
         db_path = os.path.abspath(db_path)
         connection = sqlite3.connect(db_path)
         cursor = connection.cursor()
-        
-        print("Conexão com o banco de dados estabelecida.")
         
         cursor.execute("SELECT content FROM extracted_pages WHERE page_title = ?", (answer_context,))
         context = cursor.fetchone()
@@ -83,21 +77,19 @@ def get_context(answer_context):
 
 def get_answer(context, user_question):
     try:
-        print(f"Gerando resposta para a pergunta: '{user_question}' usando o contexto.")
-        
         prompt_answer_user_question = (f"""
             Analise este contexto sobre a FURIA no CS:GO: {context}
             Responda de forma DIRETA e OBJETIVA esta pergunta: {user_question}
-            Regras: Seja extremamente conciso (máx. 3 frases); Responda APENAS com fatos do contexto; Formate datas/resultados claramente; Se não souber, diga apenas 'Não há dados suficientes'.
+            Regras: Seja extremamente conciso (máx. 3 frases); Responda APENAS com fatos do contexto; Formate datas/resultados claramente; Se não souber, diga apenas 'Desculpe. Ainda não sou capaz de responder isso. Que tal perguntar algo relacionado ao time de CS da FURIA? Eu sei tudo sobre isso!'.
         """)
         
         response = query_openai(prompt_answer_user_question)
         
         if not response:
             print(f"Não foi possível gerar uma resposta para a pergunta: '{user_question}'")
+            
             return None
         
-        print(f"Resposta gerada: {response}")
         return response
     
     except Exception as e:

@@ -20,24 +20,24 @@ def handle_query():
             return response
         
         if not request.is_json:
-            return jsonify({'error': 'Content-Type must be application/json'}), 415
+            return jsonify({'error': 'Content-Type tem que ser application/json.'}), 415
         
         data = request.get_json()
         if not data or 'input' not in data:
-            return jsonify({'error': 'Input field is required'}), 400
+            return jsonify({'error': 'Obrigatório ter o campo "input".'}), 400
         
         user_question = data.get('input')
         answer_context = helpers.find_page(user_question)
         if not answer_context:
-            return jsonify({'error': 'Could not find appropriate page'}), 404
+            return jsonify({'error': 'Não foi possível encontrar a página apropriada.'}), 404
         
         context = helpers.get_context(answer_context)
         if not context:
-            return jsonify({'error': 'Could not retrieve page context'}), 404
+            return jsonify({'error': 'Não foi possível recuperar o contexto.'}), 404
         
         answer_user_question = helpers.get_answer(context, user_question)
         if not answer_user_question:
-            return jsonify({'error': 'Could not generate answer'}), 500
+            return jsonify({'error': 'Não foi possível gerar a mensagem.'}), 500
         
         response = jsonify({'response': answer_user_question})
         response.headers.add('Access-Control-Allow-Origin', 'https://furia-fangirl.vercel.app')
@@ -45,7 +45,7 @@ def handle_query():
     
     except Exception as e:
         print(f"Error processing request: {str(e)}")
-        return jsonify({'error': 'Internal server error'}), 500
+        return jsonify({'error': 'Erro interno do servidor.'}), 500
     
 if __name__ == '__main__':
     app.run(debug=True)
