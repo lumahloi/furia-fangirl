@@ -9,3 +9,6 @@ sidebar_position: 1
 - **Frontend**: TypeScript, React, Material UI, Docusaurus, Vercel;
 - **Backend**: Flask, Render, OpenAI API, BeautifulSoup;
 - **Banco de dados**: SQLite.
+
+## Fotos
+![Exemplo de interação 1](./assets/2_screenshot.png)
