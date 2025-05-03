@@ -13,8 +13,8 @@ const config: Config = {
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
   i18n: {
-    defaultLocale: 'pt',
-    locales: ['pt'],
+    defaultLocale: 'pt-br',
+    locales: ['pt-br'],
   },
 
   presets: [
@@ -63,7 +63,7 @@ const config: Config = {
           items: [
             {
               label: 'Documentação',
-              to: '/docs/intro',
+              to: '/docs/introducao',
             },
           ],
         },
