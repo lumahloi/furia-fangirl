@@ -12,7 +12,7 @@
 - Respect the rules and follow the context of answering only questions related to FURIA.
 
 ## How to run locally
-A seguir, o passo a passo de reproduzir a aplicação localmente em sua máquina.
+Step by step guide of how to run the project locally on your machine.
 
 ### Pre-requisites
 - **Git**: install the latest version from the official website by clicking [here](https://git-scm.com/downloads);
